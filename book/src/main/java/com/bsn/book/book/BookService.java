@@ -52,4 +52,22 @@ public class BookService {
         );
     
     }
+
+    public PageResponse<BookResponse> findBooksByOwner(Integer page, Integer size, Authentication connectedUser) {
+        User user = (User) connectedUser.getPrincipal();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+        Page<Book> books = repository.findAll(BookSpecification.withOwnerId(user.getUserId()), pageable);
+        List<BookResponse> content = books.stream().map(bookMapper::toBookResponse).collect(Collectors.toList());
+        
+        return new PageResponse<>(
+            content,
+            books.getNumber(),
+            books.getSize(),
+            books.getTotalElements(),
+            books.getTotalPages(),
+            books.isFirst(),
+            books.isLast()
+        );
+        
+    }
 }
