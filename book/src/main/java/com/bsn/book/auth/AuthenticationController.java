@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -30,6 +33,17 @@ public class AuthenticationController {
         authenticationService.register(request);
         return ResponseEntity.accepted().build();
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest request) {
+        return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @GetMapping("activate-account")
+    public void confirm(@RequestParam String token) throws MessagingException {
+        authenticationService.activateAccount(token);
+    }
+    
     
 
 }
