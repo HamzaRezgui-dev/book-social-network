@@ -2,6 +2,7 @@ package com.bsn.book.book;
 
 import org.springframework.stereotype.Service;
 
+import com.bsn.book.file.FileUtils;
 import com.bsn.book.history.BookTransactionHistory;
 
 @Service
@@ -27,7 +28,7 @@ public class BookMapper {
             .isbn(book.getIsbn())
             .synopsis(book.getSynopsis())
             .owner(book.getOwner().getUsername())
-            .cover(null)
+            .cover(FileUtils.readFileFromLocation(book.getBookCover()))
             .rate(book.getRate())
             .archived(book.isArchived())
             .shareable(book.isShareable())
